@@ -23,7 +23,17 @@ Mat genRandomVector()
     }
     return mat;
 }
-int main() {
+void getGradientImage(Mat inputImage, Mat &XImage, Mat &YImage)
+{
+    Sobel(inputImage,XImage,CV_16S,1,0);
+    Sobel(inputImage,YImage,CV_16S,0,1);
+    convertScaleAbs(XImage,XImage,0.5,128);
+    blur(XImage,XImage,Size(10,10));
+    convertScaleAbs(YImage,YImage,0.5,128);
+
+}
+void TestRandomVector()
+{
     VectorCanvas canvas(30);
     Mat testV = genRandomVector();
     Mat gradData[2];
@@ -31,6 +41,21 @@ int main() {
     Mat mat = canvas.DrawVector(gradData[0],gradData[1]);
     namedWindow("draw",CV_WINDOW_AUTOSIZE);
     imshow("draw",mat);
+    waitKey();
+}
+int main() {
+    VectorCanvas canvas(10);
+    Mat img = imread("lena.jpg");
+    cvtColor(img,img,CV_RGB2GRAY);
+    Mat XImage, YImage;
+    getGradientImage(img,XImage,YImage);
+
+    namedWindow("draw",CV_WINDOW_AUTOSIZE);
+    imshow("draw",img);
+    imshow("XGradient",XImage);
+    imshow("YGradient",YImage);
+    Mat bigVis = canvas.DrawVector(XImage,YImage);
+    imshow("gradient",bigVis);
     waitKey();
     std::cout << "Hello, World!" << std::endl;
     return 0;
