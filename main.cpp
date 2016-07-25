@@ -43,10 +43,22 @@ void TestRandomVector()
     imshow("draw",mat);
     waitKey();
 }
+Mat DrawPoly()
+{
+    Mat img;
+    img.create(128,128,CV_8UC3);
+    Point pts[] = {Point(30,20),Point(60,20), Point(60,50),Point(30,50)};
+    int num[] = {4};
+    polylines(img,&pts,num,1,true,Scalar(255,255,255));
+    return img;
+}
 int main() {
     VectorCanvas canvas(10);
-    Mat img = imread("lena.jpg");
+
+    Mat img(128,128,CV_RGB);
+
     cvtColor(img,img,CV_RGB2GRAY);
+
     Mat XImage, YImage;
     getGradientImage(img,XImage,YImage);
 
